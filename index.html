@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmammed - Gestión de Farmacia</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Encabezado -->
+        <header class="header">
+            <div class="header-content">
+                <img src="logo de Pharmammed.png" alt="Pharmammed" class="logo-header">
+                <p class="subtitle">Sistema de Control de Stock y Ventas</p>
+            </div>
+            <div class="header-actions">
+                <!-- Selector de rotación (Identico a V4) -->
+                <div class="header-sync"
+                    style="background: #fff3cd; color: #856404; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; border: 1px solid #ffeeba; margin-right: 10px;">
+                    <span>🔄 Salida:</span>
+                    <select id="selectRotacion"
+                        style="border: none; background: transparent; font-weight: bold; color: #856404; cursor: pointer; border-bottom: 2px solid #856404; font-size: 0.85rem; outline: none;">
+                        <option value="FIFO">FIFO (Antiguo)</option>
+                        <option value="FEFO">FEFO (Vence antes)</option>
+                    </select>
+                </div>
+
+                <button id="btnVentasHeader" class="btn btn-info" title="Ver ventas totales (Ctrl+V)">
+                    📊 Ver Caja
+                </button>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                    <button id="btnSoporte" class="btn btn-secondary" title="Contacto y Soporte">🛟 Soporte</button>
+                    <a href="https://wa.me/5492664024390" target="_blank"
+                        style="color: #fff; font-size: 0.75rem; text-decoration: none; display: flex; align-items: center; gap: 4px; opacity: 0.9;">
+                        <span style="background: #25D366; width: 8px; height: 8px; border-radius: 50%;"></span> +54 9
+                        266 402-4390
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Barra de herramientas -->
+        <nav class="toolbar">
+            <button id="btnVerVentas" class="btn btn-info" title="Ver ventas totales">
+                📊 Ver Caja Diaria
+            </button>
+            <button id="btnImprimirTicket" class="btn btn-warning" title="Imprimir ticket">
+                🖨️ Imprimir Último Ticket
+            </button>
+        </nav>
+
+        <!-- Contenido principal con pestañas -->
+        <div class="tabs-container">
+            <!-- Botones de pestañas -->
+            <div class="tabs-buttons">
+                <button class="tab-button active" data-tab="tab-inventario">📦 Inventario</button>
+                <button class="tab-button" data-tab="tab-ventas">💊 Nueva Venta</button>
+                <button class="tab-button" data-tab="tab-reportes">📈 Reportes</button>
+                <button class="tab-button" data-tab="tab-ayuda">📖 Ayuda</button>
+            </div>
+
+            <!-- PESTAÑA: INVENTARIO -->
+            <div id="tab-inventario" class="tab-content active">
+                <section class="section">
+                    <h2>📦 Gestión de Productos</h2>
+                    <p class="section-subtitle">Agrega o modifica productos del catálogo:</p>
+
+                    <div class="form-grid-products">
+                        <div class="form-group">
+                            <label for="prodNombre">Nombre del Producto:</label>
+                            <input type="text" id="prodNombre" placeholder="Ej: Paracetamol 500mg" class="input-large">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodCodigoBarras">Código de Barras (opcional):</label>
+                            <input type="text" id="prodCodigoBarras" placeholder="Ej: 7501234567890"
+                                class="input-large">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodDroga">Droga (Principio Activo):</label>
+                            <input type="text" id="prodDroga" placeholder="Ej: Paracetamol">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodDosis">Dosis Unitaria:</label>
+                            <input type="text" id="prodDosis" placeholder="Ej: 500mg">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodPresentacion">Presentación:</label>
+                            <input type="text" id="prodPresentacion" placeholder="Ej: Caja x 30 comp">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodMarca">Marca Comercial:</label>
+                            <input type="text" id="prodMarca" placeholder="Ej: Tafirol">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodLaboratorio">Laboratorio:</label>
+                            <input type="text" id="prodLaboratorio" placeholder="Ej: Bayer">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodTemp">Temperatura:</label>
+                            <select id="prodTemp">
+                                <option value="Ambiente">Ambiente</option>
+                                <option value="Controlada">Temperatura Controlada</option>
+                                <option value="Frio">Cadena de Frío</option>
+                            </select>
+                        </div>
+
+                        <!-- Datos del Lote -->
+                        <div class="form-group"
+                            style="grid-column: span 3; border-top: 1px solid #ddd; margin-top: 10px; padding-top: 10px;">
+                            <strong>Datos del Lote (Ingreso de Stock)</strong>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prodLote">Lote:</label>
+                            <input type="text" id="prodLote" placeholder="A123">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodVencimiento">Vencimiento:</label>
+                            <input type="date" id="prodVencimiento">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prodPrecio">Precio Unitario:</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="prodPrecio" placeholder="0.00" step="0.01">
+                                <span class="currency">$</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="prodStock">Cantidad (Stock):</label>
+                            <input type="number" id="prodStock" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group button-group">
+                            <button id="btnAgregarProducto" class="btn btn-success">
+                                ➕ Agregar Producto
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Excel Toolbar (Standard) -->
+                    <div class="toolbar-excel" style="margin-bottom: 20px; display: flex; gap: 10px;">
+                        <button id="btnImportarExcel" class="btn btn-secondary">📂 Importar Excel (Stock)</button>
+                        <button id="btnExportarExcel" class="btn btn-success">💾 Exportar Inventario</button>
+                        <button id="btnAumentoMasivo" class="btn btn-warning">📈 Aumento %</button>
+                        <button id="btnReduccionMasiva" class="btn btn-warning">📉 Reducción %</button>
+                    </div>
+
+                    <!-- Sync Toolbar (New Feature) -->
+                    <div class="toolbar-sync"
+                        style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px;">
+                        <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--color-primary);">🔄 Sincronización
+                            Multicaja</h4>
+                        <p style="font-size: 0.9em; margin-bottom: 10px; color: #666;">
+                            Use estas herramientas para trabajar con varias computadoras. <strong>El archivo de Cierre
+                                es "Todo en Uno" (Incluye Ventas e Inventario).</strong>
+                        </p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button id="btnExportarCierre" class="btn btn-primary"
+                                title="Genera un archivo ÚNICO que contiene Ventas e Inventario">
+                                📤 Exportar Cierre (Ventas + Inventario)
+                            </button>
+                            <div style="border-left: 2px solid #ccc; padding-left: 10px; display: flex; gap: 10px;">
+                                <button id="btnImportarVentas" class="btn btn-info"
+                                    title="Carga ventas de otras cajas y descuenta stock local">
+                                    📥 1. Consolidar Ventas (Central)
+                                </button>
+                                <button id="btnImportarMaster" class="btn btn-danger"
+                                    title="Actualiza todo el inventario desde el archivo central consolidado">
+                                    📥 2. Actualizar Inventario (Sucursal)
+                                </button>
+                                <button id="btnDistribuirStock" class="btn btn-warning"
+                                    title="Divide el stock actual en partes iguales para varias cajas">
+                                    📤 3. Distribuir Stock (Dividir)
+                                </button>
+                            </div>
+                        </div>
+                        <input type="file" id="inputSync" accept=".xlsx, .xls" style="display: none;">
+                    </div>
+
+                    <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" style="display: none;">
+
+                    <div class="tabla-container">
+                        <h3>Catálogo Actual</h3>
+                        <table id="tablaProductos" class="tabla-general">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Precio</th>
+                                    <th>Stock</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaProductos">
+                                <!-- Se llena dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- PESTAÑA: VENTAS -->
+            <div id="tab-ventas" class="tab-content">
+                <section class="section">
+                    <h2>🛒 Realizar Venta</h2>
+
+                    <div class="venta-controls">
+                        <div class="form-group search-group">
+                            <label for="inputCodigoBarras">🔍 Código de Barras (Scanner):</label>
+                            <input type="text" id="inputCodigoBarras"
+                                placeholder="Escanee o ingrese código de barras..." class="input-large"
+                                autocomplete="off">
+                        </div>
+                        <div class="form-group search-group">
+                            <label for="selectProductoVenta">O Buscar Producto:</label>
+                            <select id="selectProductoVenta" class="input-large">
+                                <option value="">Seleccione un producto...</option>
+                            </select>
+                        </div>
+                        <div class="form-group quantity-group">
+                            <label for="cantidadVenta">Cantidad:</label>
+                            <input type="number" id="cantidadVenta" value="1" min="1" style="width: 80px;">
+                        </div>
+                        <div class="form-group button-group">
+                            <button id="btnAgregarCarrito" class="btn btn-success">
+                                ⬇️ Agregar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Campo de Paciente/Cliente -->
+                    <div class="venta-controls"
+                        style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #e0e0e0;">
+                        <div class="form-group search-group">
+                            <label for="fechaVenta">📅 Fecha de Dispensa:</label>
+                            <input type="date" id="fechaVenta" class="input-medium">
+                        </div>
+                        <div class="form-group search-group">
+                            <label for="clienteNombre">👤 Paciente/Cliente:</label>
+                            <input type="text" id="clienteNombre" placeholder="Nombre del paciente (opcional)"
+                                class="input-large" autocomplete="off">
+                        </div>
+                        <div class="form-group search-group">
+                            <label for="inputDocumento">📋 Documento/RUT (opcional):</label>
+                            <input type="text" id="inputDocumento" placeholder="Ej: 12.345.678-9" class="input-large"
+                                autocomplete="off">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tabla del carrito -->
+                <section class="section">
+                    <h2>🛍️ Detalle de Venta</h2>
+
+                    <div class="tabla-container">
+                        <table id="tablaCarrito" class="tabla-carrito">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cant.</th>
+                                    <th>Precio Unit.</th>
+                                    <th>Subtotal</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpoTablaCarrito">
+                            </tbody>
+                            <tfoot>
+                                <tr class="total-row">
+                                    <td colspan="3" style="text-align: right;"><strong>TOTAL:</strong></td>
+                                    <td id="totalCarrito">$0.00</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div id="carritoVacio" class="carrito-vacio">
+                            <p>El carrito está vacío</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Botones finales -->
+                <section class="section botones-finales">
+                    <button id="btnFinalizarCompra" class="btn btn-success btn-large">
+                        ✅ Cobrar e Imprimir
+                    </button>
+                    <button id="btnCancelarCompra" class="btn btn-secondary btn-large">
+                        ❌ Cancelar
+                    </button>
+                </section>
+            </div>
+
+            <!-- PESTAÑA: REPORTES -->
+            <div id="tab-reportes" class="tab-content">
+                <section class="section">
+                    <h2>📈 Reportes y Estadísticas</h2>
+                    <div class="toolbar" style="justify-content: flex-start; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnReporteStock" class="btn btn-info">📦 Valorización de Stock</button>
+                        <button id="btnReporteDispensas" class="btn btn-secondary">📋 Detalle de Dispensas</button>
+                        <button id="btnAlertasStock" class="btn btn-warning">⚠️ Alertas de Vencimiento</button>
+                    </div>
+
+                    <div id="contenedorReportes" class="tabla-container">
+                        <p>Seleccione un reporte para visualizar.</p>
+                        <table id="tablaReportes" class="tabla-general" style="display:none; width: 100%;">
+                            <thead id="headerReportes"></thead>
+                            <tbody id="bodyReportes"></tbody>
+                            <tfoot id="footerReportes"></tfoot>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- PESTAÑA: AYUDA -->
+            <div id="tab-ayuda" class="tab-content">
+                <section class="section">
+                    <h2>📖 Manual de Usuario</h2>
+                    <p class="section-subtitle">Guía completa para usar el sistema</p>
+
+                    <div class="manual-container">
+
+                        <!-- Botón Manual Multicaja -->
+                        <div
+                            style="margin-bottom: 20px; text-align: center; padding: 15px; background: #e3f2fd; border-radius: 8px; border: 1px solid #90caf9;">
+                            <h3 style="color: #1976d2; margin-top:0;">📘 Nuevo: Manual de Sincronización</h3>
+                            <p>Aprende a conectar varias cajas, exportar datos y consolidar ventas.</p>
+                            <a href="manual_usuario.html" target="_blank" class="btn btn-primary"
+                                style="text-decoration: none; font-size: 1.1em;">
+                                🔗 Abrir Manual Multicaja Paso a Paso
+                            </a>
+                        </div>
+
+                        <!-- Índice -->
+                        <div class="manual-index">
+                            <h3>📑 Índice Rápido</h3>
+                            <ul>
+                                <li><a href="#ayuda-inicio">🚀 Primeros Pasos</a></li>
+                                <li><a href="#ayuda-inventario">📦 Gestión de Inventario</a></li>
+                                <li><a href="#ayuda-barras">🔍 Código de Barras</a></li>
+                                <li><a href="#ayuda-ventas">💊 Realizar Ventas</a></li>
+                                <li><a href="#ayuda-dispensa">👥 Sistema de Dispensa</a></li>
+                                <li><a href="#ayuda-excel">📊 Excel</a></li>
+                                <li><a href="#ayuda-tickets">🖨️ Tickets</a></li>
+                                <li><a href="#ayuda-faq">❓ Preguntas Frecuentes</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Contenido del manual -->
+                        <div class="manual-content">
+
+                            <!-- Primeros Pasos -->
+                            <div id="ayuda-inicio" class="manual-section">
+                                <h3>🚀 Primeros Pasos</h3>
+                                <p><strong>Interfaz Principal:</strong></p>
+                                <ul>
+                                    <li><strong>📦 Inventario:</strong> Agregar y gestionar productos</li>
+                                    <li><strong>💊 Nueva Venta:</strong> Realizar ventas a clientes</li>
+                                    <li><strong>📈 Reportes:</strong> Ver estadísticas y reportes</li>
+                                    <li><strong>📖 Ayuda:</strong> Esta sección</li>
+                                </ul>
+                                <p><strong>Sistema FEFO:</strong></p>
+                                <ul>
+                                    <li><strong>FEFO:</strong> Vende primero lo que vence primero (First Expired, First
+                                        Out)</li>
+                                    <li>Ideal para medicamentos y productos con fecha de vencimiento</li>
+                                </ul>
+                            </div>
+
+                            <!-- Inventario -->
+                            <div id="ayuda-inventario" class="manual-section">
+                                <h3>📦 Gestión de Inventario</h3>
+                                <p><strong>Agregar un producto:</strong></p>
+                                <ol>
+                                    <li>Ve a la pestaña "📦 Inventario"</li>
+                                    <li>Completa los campos:
+                                        <ul>
+                                            <li><strong>Nombre:</strong> Ej: "Paracetamol 500mg"</li>
+                                            <li><strong>Código de Barras:</strong> Ej: "7501234567890" (opcional)</li>
+                                            <li><strong>Precio:</strong> Ej: "5.00"</li>
+                                            <li><strong>Stock:</strong> Ej: "100"</li>
+                                            <li><strong>Lote:</strong> Ej: "LOTE-2026-01" (opcional)</li>
+                                            <li><strong>Vencimiento:</strong> Fecha (opcional)</li>
+                                        </ul>
+                                    </li>
+                                    <li>Click en "➕ Agregar Producto"</li>
+                                    <li>✅ Producto agregado</li>
+                                </ol>
+                                <p><strong>Editar un producto:</strong></p>
+                                <ol>
+                                    <li>Busca el producto en la tabla</li>
+                                    <li>Click en el botón ✏️ (editar)</li>
+                                    <li>Los datos se cargan en el formulario</li>
+                                    <li>Modifica los campos necesarios</li>
+                                    <li>Click en "💾 Guardar Cambios"</li>
+                                    <li>✅ Producto actualizado</li>
+                                </ol>
+                                <p><strong>Eliminar producto:</strong> Click en el botón 🗑️ en la tabla</p>
+                            </div>
+
+                            <!-- Código de Barras -->
+                            <div id="ayuda-barras" class="manual-section">
+                                <h3>� Código de Barras</h3>
+                                <p><strong>¿Qué scanner necesito?</strong></p>
+                                <ul>
+                                    <li>✅ Scanner USB con cable ($20-50 USD)</li>
+                                    <li>✅ Scanner Bluetooth inalámbrico ($50-100 USD)</li>
+                                    <li>✅ Cualquier marca (Honeywell, Zebra, genéricos)</li>
+                                    <li>✅ Modo requerido: HID Keyboard (modo teclado)</li>
+                                </ul>
+                                <p><strong>Conectar el scanner:</strong></p>
+                                <ul>
+                                    <li><strong>USB:</strong> Conecta el cable → Espera 5 segundos → ✅ Listo</li>
+                                    <li><strong>Bluetooth:</strong> Enciende → Conecta desde configuración → ✅ Listo
+                                    </li>
+                                </ul>
+                                <p><strong>Usar en ventas:</strong></p>
+                                <ol>
+                                    <li>Ve a "💊 Nueva Venta"</li>
+                                    <li>Espera que el cursor esté en el campo de código de barras</li>
+                                    <li>Escanea el producto → El producto se selecciona automáticamente</li>
+                                    <li>Ingresa cantidad y click en "Agregar"</li>
+                                </ol>
+                            </div>
+
+                            <!-- Ventas -->
+                            <div id="ayuda-ventas" class="manual-section">
+                                <h3>� Realizar Ventas</h3>
+                                <p><strong>Venta manual (sin scanner):</strong></p>
+                                <ol>
+                                    <li>Ve a "💊 Nueva Venta"</li>
+                                    <li>Selecciona producto del menú desplegable</li>
+                                    <li>Ingresa cantidad</li>
+                                    <li>Click en "⬇️ Agregar"</li>
+                                    <li>Repite para más productos</li>
+                                    <li>Click en "✅ Cobrar e Imprimir"</li>
+                                </ol>
+                                <p><strong>Venta con scanner (rápida):</strong></p>
+                                <ol>
+                                    <li>Ve a "� Nueva Venta"</li>
+                                    <li>Escanea código de barras → Producto seleccionado</li>
+                                    <li>Click en "⬇️ Agregar"</li>
+                                    <li>Repite para más productos</li>
+                                    <li>Click en "✅ Cobrar e Imprimir"</li>
+                                </ol>
+                                <p><strong>Modificar carrito:</strong></p>
+                                <ul>
+                                    <li><strong>Eliminar producto:</strong> Click en ✕</li>
+                                    <li><strong>Cancelar venta:</strong> Click en "❌ Cancelar"</li>
+                                </ul>
+                            </div>
+
+                            <!-- Dispensa -->
+                            <div id="ayuda-dispensa" class="manual-section">
+                                <h3>👥 Sistema de Dispensa</h3>
+                                <p><strong>¿Qué es?</strong> Registro de a qué paciente se le entrega cada medicamento.
+                                </p>
+                                <p><strong>Cómo usar:</strong></p>
+                                <ol>
+                                    <li>En "💊 Nueva Venta", completa los campos de "Paciente/Cliente"</li>
+                                    <li>Agrega productos y finaliza la venta</li>
+                                    <li>✅ Los datos aparecerán en el ticket y en el historial</li>
+                                </ol>
+                            </div>
+
+                            <!-- Sincronización Multicaja -->
+                            <div id="ayuda-sync" class="manual-section">
+                                <h3>🔄 Sincronización Multicaja</h3>
+                                <p><strong>Cómo conectar varias PC:</strong></p>
+                                <ol>
+                                    <li>Al final del día, cada caja exporta su "Cierre" y lo envía a la Central.</li>
+                                    <li>La Central usa "📥 1. Consolidar Ventas" con cada archivo para sumar ventas.
+                                    </li>
+                                    <li><strong>Para repartir el stock:</strong> La Central usa "📤 3. Distribuir Stock"
+                                        y elige la cantidad de cajas.</li>
+                                    <li>Esto genera archivos separados. Cada caja importa su archivo asignado con "📥 2.
+                                        Actualizar Inventario".</li>
+                                </ol>
+                            </div>
+
+                            <!-- Excel -->
+                            <div id="ayuda-excel" class="manual-section">
+                                <h3>� Importar/Exportar Excel</h3>
+                                <p>Usa los botones de la pestaña Inventario para gestionar tus listas masivamente.</p>
+                            </div>
+
+                            <!-- Tickets -->
+                            <div id="ayuda-tickets" class="manual-section">
+                                <h3>🖨️ Impresión de Tickets</h3>
+                                <p>El sistema genera tickets optimizados para impresoras térmicas de 58mm o 80mm.</p>
+                            </div>
+
+                            <!-- FAQ -->
+                            <div id="ayuda-faq" class="manual-section">
+                                <h3>❓ Preguntas Frecuentes</h3>
+                                <p><strong>¿Funciona sin internet?</strong></p>
+                                <p>✅ Sí, una vez cargada la página, todo funciona localmente.</p>
+                                <p><strong>¿Y si cambio de computadora?</strong></p>
+                                <p>✅ Debes exportar tu inventario a Excel e importarlo en la nueva máquina.</p>
+                            </div>
+
+                            <!-- Contacto -->
+                            <div class="manual-section"
+                                style="background: #e3f2fd; padding: 25px; border-radius: 12px; margin-top: 30px; border: 1px solid #b3d7ff;">
+                                <h3>📞 ¿Necesitas Soporte Técnico?</h3>
+                                <p><strong>WhatsApp:</strong> <a href="https://wa.me/5492664024390" target="_blank"
+                                        style="color: #0b7dda; font-weight: bold; text-decoration: none;">+54 9 266
+                                        402-4390</a></p>
+                                <p><strong>Horario:</strong> Lunes a Viernes 09:00 - 18:00 hs</p>
+                                <p><strong>Respuesta:</strong> Inmediata o en menos de 24 horas</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Modales -->
+
+        <!-- Modal Soporte -->
+        <div id="modalSupport" class="modal">
+            <div class="modal-content" style="max-width: 500px;">
+                <h2 style="text-align: center; color: var(--color-secondary);">🛟 Centro de Soporte</h2>
+                <div style="padding: 20px; text-align: center;">
+                    <p>¿En qué podemos ayudarte hoy?</p>
+
+                    <div style="display: grid; gap: 15px; margin-top: 25px;">
+                        <a href="https://wa.me/5492664024390" target="_blank" class="btn border-radius: 6px;"
+                            style="background: #25D366; color: white; padding: 15px; text-decoration: none; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            💬 WhatsApp Directo
+                        </a>
+                        <button id="supportCopyLink" class="btn btn-info">🔗 Copiar Link de Soporte</button>
+                    </div>
+
+                    <div
+                        style="margin-top: 30px; text-align: left; background: #f9f9f9; padding: 15px; border-radius: 6px;">
+                        <p style="font-weight: bold; margin-bottom: 10px;">O envíanos un correo:</p>
+                        <form id="formSupport" action="https://formspree.io/f/mvgzqkpv" method="POST" target="_blank">
+                            <input type="email" name="email" placeholder="Tu Email" required
+                                style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                            <textarea name="message" placeholder="¿Cómo podemos ayudarte?" rows="3" required
+                                style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; resize: none;"></textarea>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Enviar Consulta</button>
+                        </form>
+                    </div>
+
+                    <button class="btn btn-secondary" id="supportClose"
+                        style="margin-top: 20px; width: 100%;">Cerrar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de confirmación -->
+        <div id="modalConfirmacion" class="modal">
+            <div class="modal-content">
+                <h2 id="tituloConfirmacion">Confirmación</h2>
+                <p id="textoConfirmacion"></p>
+                <div class="modal-buttons">
+                    <button id="btnConfirmarSi" class="btn btn-success">Sí, confirmar</button>
+                    <button id="btnConfirmarNo" class="btn btn-secondary">No, cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de información -->
+        <div id="modalInfo" class="modal">
+            <div class="modal-content">
+                <h2 id="tituloInfo">Información</h2>
+                <p id="textoInfo"></p>
+                <div class="modal-buttons">
+                    <button id="btnCerrarInfo" class="btn btn-success">Aceptar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de error -->
+        <div id="modalError" class="modal">
+            <div class="modal-content error-content">
+                <h2>❌ Error</h2>
+                <p id="textoError"></p>
+                <div class="modal-buttons">
+                    <button id="btnCerrarError" class="btn btn-secondary">Cerrar</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
