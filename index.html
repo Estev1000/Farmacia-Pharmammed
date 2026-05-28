@@ -214,10 +214,13 @@
                                 autocomplete="off">
                         </div>
                         <div class="form-group search-group">
-                            <label for="selectProductoVenta">O Buscar Producto:</label>
-                            <select id="selectProductoVenta" class="input-large">
-                                <option value="">Seleccione un producto...</option>
-                            </select>
+                            <label for="inputBusquedaProducto">🔍 Buscar Producto:</label>
+                            <div class="search-container">
+                                <input type="text" id="inputBusquedaProducto"
+                                    placeholder="Busque por nombre, droga, marca o código de barras..."
+                                    class="input-large" autocomplete="off">
+                                <div id="resultadosBusqueda" class="search-results"></div>
+                            </div>
                         </div>
                         <div class="form-group quantity-group">
                             <label for="cantidadVenta">Cantidad:</label>
@@ -377,6 +380,8 @@
                                     <li>Completa los campos:
                                         <ul>
                                             <li><strong>Nombre:</strong> Ej: "Paracetamol 500mg"</li>
+                                            <li><strong>Droga (Principio Activo):</strong> Es la sustancia que produce el efecto terapéutico. Ej: "Paracetamol"</li>
+                                            <li><strong>Marca Comercial:</strong> Nombre del producto que le da el laboratorio. Ej: "Tafirol"</li>
                                             <li><strong>Código de Barras:</strong> Ej: "7501234567890" (opcional)</li>
                                             <li><strong>Precio:</strong> Ej: "5.00"</li>
                                             <li><strong>Stock:</strong> Ej: "100"</li>
@@ -430,7 +435,7 @@
                                 <p><strong>Venta manual (sin scanner):</strong></p>
                                 <ol>
                                     <li>Ve a "💊 Nueva Venta"</li>
-                                    <li>Selecciona producto del menú desplegable</li>
+                                    <li>Busca producto por nombre, droga, marca o código de barras</li>
                                     <li>Ingresa cantidad</li>
                                     <li>Click en "⬇️ Agregar"</li>
                                     <li>Repite para más productos</li>
@@ -590,7 +595,7 @@
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
-    <script src="app.js"></script>
+    <script src="app.min.js"></script>
 </body>
 
 </html>
