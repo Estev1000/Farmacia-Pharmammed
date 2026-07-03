@@ -123,7 +123,14 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="prodPrecio">Precio Unitario:</label>
+                            <label for="prodPrecioCompra">Precio de Compra:</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="prodPrecioCompra" placeholder="0.00" step="0.01">
+                                <span class="currency">$</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="prodPrecio">Precio de Venta:</label>
                             <div class="input-wrapper">
                                 <input type="number" id="prodPrecio" placeholder="0.00" step="0.01">
                                 <span class="currency">$</span>
@@ -132,6 +139,10 @@
                         <div class="form-group">
                             <label for="prodStock">Cantidad (Stock):</label>
                             <input type="number" id="prodStock" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodStockMinimo">Stock Mínimo:</label>
+                            <input type="number" id="prodStockMinimo" placeholder="0" min="0">
                         </div>
                         <div class="form-group button-group">
                             <button id="btnAgregarProducto" class="btn btn-success">
@@ -188,8 +199,12 @@
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Precio</th>
+                                    <th>P. Venta</th>
+                                    <th>P. Compra</th>
+                                    <th>Ganancia</th>
                                     <th>Stock</th>
+                                    <th>Stock Mín</th>
+                                    <th>Rotación</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -265,6 +280,7 @@
                                     <th>Cant.</th>
                                     <th>Precio Unit.</th>
                                     <th>Subtotal</th>
+                                    <th>Ganancia</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -274,12 +290,44 @@
                                 <tr class="total-row">
                                     <td colspan="3" style="text-align: right;"><strong>TOTAL:</strong></td>
                                     <td id="totalCarrito">$0.00</td>
+                                    <td id="totalGananciaCarrito">$0.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr id="descuentoRow" style="display:none;">
+                                    <td colspan="3" style="text-align: right;">
+                                        <strong>Descuento:</strong>
+                                    </td>
+                                    <td id="totalDescuento">-$0.00</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr class="total-row" id="totalConDescuentoRow" style="display:none;">
+                                    <td colspan="3" style="text-align: right;"><strong>TOTAL CON DESCUENTO:</strong></td>
+                                    <td id="totalConDescuento">$0.00</td>
+                                    <td></td>
                                     <td></td>
                                 </tr>
                             </tfoot>
                         </table>
                         <div id="carritoVacio" class="carrito-vacio">
                             <p>El carrito está vacío</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Descuento -->
+                <section class="section" style="margin-top: 15px;">
+                    <div class="venta-controls" style="background:#fff3e0;border-color:#ffe0b2;">
+                        <div class="form-group" style="flex:1;">
+                            <label for="inputDescuento">🏷️ Descuento (%)</label>
+                            <input type="number" id="inputDescuento" placeholder="0" min="0" max="100" step="0.5" value="0" style="width:120px;">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label for="inputDescuentoMotivo">Motivo (opcional)</label>
+                            <input type="text" id="inputDescuentoMotivo" placeholder="Ej: Promoción, mayorista..." style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:0 0 auto; display:flex; align-items:flex-end;">
+                            <button id="btnAplicarDescuento" class="btn btn-warning">🏷️ Aplicar</button>
                         </div>
                     </div>
                 </section>
@@ -302,6 +350,7 @@
                     <div class="toolbar" style="justify-content: flex-start; gap: 10px; margin-bottom: 20px;">
                         <button id="btnReporteStock" class="btn btn-info">📦 Valorización de Stock</button>
                         <button id="btnReporteDispensas" class="btn btn-secondary">📋 Detalle de Dispensas</button>
+                        <button id="btnReporteRotacion" class="btn btn-primary">🔄 Rotación de Productos</button>
                         <button id="btnAlertasStock" class="btn btn-warning">⚠️ Alertas de Vencimiento</button>
                     </div>
 

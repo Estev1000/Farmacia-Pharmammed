@@ -472,6 +472,74 @@ tr:last-child td {
     font-style: italic;
 }
 
+/* Rotación badges */
+.rotacion-alta {
+    color: #fff;
+    background: #4caf50;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.rotacion-media {
+    color: #fff;
+    background: #ff9800;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.rotacion-baja {
+    color: #fff;
+    background: #f44336;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.alert-stock-bajo {
+    background-color: #ffebee !important;
+}
+
+.alert-stock-bajo td:first-child {
+    border-left: 4px solid #f44336;
+}
+
+.alert-stock-critico td:first-child {
+    border-left: 4px solid #d32f2f;
+}
+
+.stock-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stock-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: #e0e0e0;
+    flex: 1;
+    min-width: 40px;
+    overflow: hidden;
+}
+
+.stock-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+
+.stock-bar-fill.ok { background: #4caf50; }
+.stock-bar-fill.warn { background: #ff9800; }
+.stock-bar-fill.danger { background: #f44336; }
+
 /* ============================================
    MODALES
    ============================================ */
