@@ -511,6 +511,10 @@ tr:last-child td {
     border-left: 4px solid #f44336;
 }
 
+.alert-stock-critico {
+    background-color: #fce4ec !important;
+}
+
 .alert-stock-critico td:first-child {
     border-left: 4px solid #d32f2f;
 }
